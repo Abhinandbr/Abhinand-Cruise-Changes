@@ -1,0 +1,179 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Admin Dashboard{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'css/models.css' %}">
+    <link rel="stylesheet" href="{% static 'css/editanddelete.css' %}">
+    <link rel="stylesheet" href="{% static 'css/all_models.css' %}">
+
+     <!-- google fonts link -->
+     <link rel="preconnect" href="https://fonts.googleapis.com" />
+     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+     <link
+       href="https://fonts.googleapis.com/css2?family=Gabarito:wght@400..900&family=Outfit:wght@100..900&display=swap"
+       rel="stylesheet"
+     />
+</head>
+<body>
+    <form method="post" style="display: none;">
+        {% csrf_token %}
+    </form>
+    <div class="page-wrapper">
+        <!-- Navbar -->
+        <nav class="navbar">
+            <div class="navbar-container">
+                <i class="fa-solid fa-ship navbar-icon"></i>
+                <div class="navbar-brand">
+                    <a href="{% url 'admin_dashboard' %}">
+                        Cruise Admin
+                    </a>
+                </div>
+                
+                <!-- Burger Menu Icon -->
+                <button class="burger-menu" id="burgerMenu">
+                    ☰
+                </button>
+
+                <!-- Search Bar -->
+            <div class="navbar-search">
+                <input type="text" class="search-input" placeholder="Search...">
+                <button class="search-btn"><i class="fa fa-search"></i></button>
+            </div>
+
+            <!-- Right Section (Dropdowns) -->
+            <div class="navbar-right">
+                <div class="nav-icons">
+                    <!-- Notifications Dropdown -->
+                    <div class="notification-dropdown" id="notification-dropdown">
+                        <button class="dropbtn" id="notificationDropdownToggle">
+                            <i class="fas fa-bell"></i>
+                            {% if unread_count > 0 %}
+                                <span class="notification-badge">{{ unread_count }}</span>
+                            {% endif %}
+                        </button>
+                    
+                        <div class="dropdown-content" id="adminNotificationDropdown">
+                            {% if unread_notifications %}
+                                {% for notification in unread_notifications %}
+                                    <a href="{% url 'changerequest_list' %}" class="notification-link">
+                                        <strong>{{ notification.title }}</strong><br>
+                                        <small>{{ notification.message|truncatewords:10 }}</small>
+                                    </a>
+                                {% endfor %}
+                                <div class="actions">
+                                    <a href="#" onclick="markNotificationsRead(); return false;" class="mark-read">Mark All as Read</a>
+                                    <a href="{% url 'notification_list' %}" class="view-all">View All</a>
+                                </div>
+                            {% else %}
+                                <p>No new notifications.</p>
+                                <div class="actions">
+                                    <a href="{% url 'notification_list' %}" class="view-all">View All</a>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>                                                    
+            
+                    <!-- Generic Dropdowns -->
+                    <div class="dropdown generic-dropdown">
+                        <button class="dropbtn"><i class="fa fa-envelope"></i></button>
+                        <div class="dropdown-content">
+                            <a href="#">Mail 1</a>
+                            <a href="#">Mail 2</a>
+                            <a href="#">Mail 3</a>
+                        </div>
+                    </div>
+            
+                    <div class="dropdown generic-dropdown">
+                        <button class="dropbtn"><i class="fa fa-user"></i></button>
+                        <div class="dropdown-content">
+                            <a href="#">Profile</a>
+                            <a href="#">Settings</a>
+                        </div>
+                    </div>
+                </div>
+            
+                <!-- Logout Button -->
+                <div class="logout-container">
+                    <button class="logout-btn" onclick="window.location.href='/'">Logout</button>
+                </div>
+            </div>            
+        </nav>
+
+        <div class="container-fluid">
+            <div class="row">
+                <!-- Sidebar -->
+                <nav id="sidebar" class="sidebar">
+                    <!-- Profile Section (Hidden in collapsed state) -->
+                    <div class="profile-section">
+                        <div class="profile-avatar">
+                            <img src="{% static 'assets/profile.jpg' %}" alt="User Avatar" class="avatar-image">
+                        </div>
+                        <div class="profile-name">
+                            <p class="username">{{ user.username }}</p>
+                            <p class="user-role">{{ user.role|capfirst }}</p>
+                        </div>
+                        <div class="profile-actions">
+                            <a href="#" class="profile-button">Profile</a>
+                        </div>
+                    </div>
+                    
+                    <!-- Navigation Links -->
+                    <ul class="nav flex-column">
+                        <!-- Dashboard Link -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'admin_dashboard' %}">
+                                <i class="mdi mdi-home"></i>
+                                <span class="nav-text">Dashboard</span>
+                            </a>
+                        </li>
+                
+                        <!-- Search Bar -->
+                        <li class="nav-item search-bar">
+                            <input
+                                type="text"
+                                id="sidebarSearch"
+                                class="form-control"
+                                placeholder="Search..."
+                                onkeyup="filterSidebarLinks()"
+                            />
+                            <button id="searchIcon" class="search-icon" onclick="toggleSearchBar()">
+                                <i class="mdi mdi-magnify"></i>
+                            </button>
+                        </li>
+                
+                        <!-- Navigation Links -->
+                        <div id="sidebar-links">
+                            {% for link in sidebar_items %}
+                                {% if link.name != "Dashboard" %}
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url link.url %}">
+                                        <i class="mdi {{ link.icon }}"></i>
+                                        <span class="nav-text">{{ link.name }}</span>
+                                    </a>
+                                </li>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </ul>
+                </nav>                
+                
+                <!-- Main Content -->
+                <main class="main-content" id="main-content">
+                    <h1 class="Dashboard-header">{% block header_title %}Dashboard{% endblock %}</h1>
+                    {% block content %}{% endblock %}
+                </main>
+            </div>
+        </div>
+    </div>
+    <script src="{% static 'javascript/dashboard.js' %}"></script>
+    <script src="{% static 'javascript/assign_shift.js' %}"></script>
+
+</body>
+</html>

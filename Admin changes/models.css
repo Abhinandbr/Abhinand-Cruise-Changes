@@ -1,0 +1,186 @@
+/* Custom Model Styles */
+* {
+  font-family: "Outfit", serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.custom-container {
+  margin-top: 30px;
+  padding: 20px;
+}
+
+h1 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+h2 {
+  margin-top: 20px;
+  font-weight: 500;
+}
+
+.custom-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  table-layout: auto; /* Allow columns to adjust based on content */
+}
+
+.custom-table th,
+.custom-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border: 2px solid #d9dcdf;
+  word-wrap: break-word; /* Allow words to break and wrap in cells */
+  white-space: normal; /* Allow text to wrap in the cells */
+}
+
+.custom-table th {
+  background-color: #f8f9fa;
+  color: #333;
+}
+
+.custom-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+/* Ensure that the last column (Actions) is wider for buttons */
+.custom-table td:last-child,
+.custom-table th:last-child {
+  text-align: center;
+  width: auto; /* Allow dynamic resizing */
+}
+
+/* Action buttons container */
+.custom-table td .action-buttons {
+  display: flex;
+  justify-content: space-evenly; /* Ensures buttons are equally spaced */
+  gap: 10px; /* Space between buttons */
+}
+
+/* Button styles */
+.custom-btn-warning,
+.custom-btn-danger,
+.custom-btn-success,
+.custom-btn-secondary,
+.custom-btn-primary {
+  padding: 5px 10px;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+  display: inline-block; /* Ensures buttons stay in a row if space allows */
+}
+
+.custom-btn-warning {
+  background-color: #ffc107;
+  color: white;
+}
+
+.custom-btn-warning:hover {
+  background-color: #e0a800;
+}
+
+.custom-btn-danger {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+}
+
+button.custom-btn-danger {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  font-size: 1rem;
+  padding: 0.4rem 0.7rem;
+  margin: 0 0.3rem;
+}
+
+.custom-btn-danger:hover {
+  background-color: #c82333;
+  cursor: pointer;
+}
+
+.custom-btn-success {
+  background-color: #35dc43;
+  color: white;
+  border: none;
+  font-size: 1rem;
+  padding: 0.4rem;
+}
+
+.custom-btn-success:hover {
+  background-color: #29a433;
+  cursor: pointer;
+}
+
+.custom-btn-secondary {
+  background-color: #6c757d;
+  color: white;
+  margin-top: 20px;
+}
+
+.custom-btn-secondary:hover {
+  background-color: #5a6268;
+}
+
+.custom-btn-primary {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.custom-btn-primary:hover {
+  background-color: #0056b3;
+}
+
+/* Ensures radio buttons for the status field are styled consistently */
+.custom-radio-group {
+  display: flex;
+  gap: 15px;
+  padding: 10px 0;
+}
+
+.custom-radio-group label {
+  display: flex;
+  align-items: center;
+}
+
+.custom-radio-group input[type="radio"] {
+  margin-right: 5px;
+}
+
+/* Style for tables that contain long data or buttons */
+.custom-table td .custom-btn-primary,
+.custom-table td .custom-btn-secondary,
+.custom-table td .custom-btn-warning,
+.custom-table td .custom-btn-danger {
+  white-space: nowrap; /* Prevent buttons from wrapping */
+  overflow: hidden;
+  text-overflow: ellipsis; /* Adds ellipsis if button text is too long */
+}
+
+/* Ensures table adjusts width automatically to fit content */
+.custom-table td {
+  max-width: 300px; /* Optional: Limit column width for text */
+  text-overflow: ellipsis; /* Adds ellipsis for overflowed text */
+  overflow: hidden; /* Hides overflowed content */
+}
+
+/* Optional: Style for very long text in cells */
+.custom-table td {
+  word-wrap: break-word; /* Breaks words to prevent overflow */
+}
+
+/* Ensure the action buttons look well on small screens */
+@media screen and (max-width: 768px) {
+  .custom-table td .action-buttons {
+    flex-direction: column; /* Stack action buttons vertically on small screens */
+    gap: 5px;
+  }
+}
